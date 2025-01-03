@@ -1,3 +1,5 @@
+#include <cstdlib>
+#include <ctime>
 #include <fstream>
 
 #ifndef CHIP8_H
@@ -40,7 +42,6 @@ class Chip8
 private:
     Ram ram {};
     CPU cpu {};
-    Keyboard keyboard {};
     Timer timer {};
     Display display {};
     unsigned char chip8_fontset[80] = {
@@ -63,9 +64,10 @@ private:
     };
 public:
     bool drawFlag = false;
+    Keyboard keyboard {};
     bool updateTimers();
     void loadFontSet();
-    void loadProgram(const char* program);
+    bool loadProgram(const char* program);
     char* emulateCycle();
     void setKeys();
 };
