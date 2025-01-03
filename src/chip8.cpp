@@ -55,11 +55,11 @@ char* Chip8::emulateCycle()
         {
             break;
         }
-        case 0x3000: // 3XNN: Skips the next instruction if VX equals NN (usually the next instruction is a jump to skip a code block)
+        case 0x3000: // 3Xkk: Skips the next instruction if VX equals kk (usually the next instruction is a jump to skip a code block)
         {
             break;
         }
-        case 0x4000: // 4XNN: Skips the next instruction if VX does not equal NN (usually the next instruction is a jump to skip a code block)
+        case 0x4000: // 4Xkk: Skips the next instruction if VX does not equal kk (usually the next instruction is a jump to skip a code block)
         {
             break;
         }
@@ -67,11 +67,11 @@ char* Chip8::emulateCycle()
         {
             break;
         }
-        case 0x6000: // 6XNN: Sets VX to NN
+        case 0x6000: // 6Xkk: Sets VX to kk
         {
             break;
         }
-        case 0x7000: // 7XNN: Adds NN to VX (carry flag is not changed)
+        case 0x7000: // 7Xkk: Adds kk to VX (carry flag is not changed)
         {
             break;
         }
@@ -98,7 +98,7 @@ char* Chip8::emulateCycle()
         }
 
         // BNNN: Jumps to the address NNN plus V0
-        // CXNN: Sets VX to the result of a bitwise and operation on a random number (Typically: 0 to 255) and NN
+        // CXkk: Sets VX to the result of a bitwise and operation on a random number (Typically: 0 to 255) and kk
         // DXYN: Draws a sprite at coordinate (VX, VY) that has a width of 8 pixels and a height of N pixels. 
                 // Each row of 8 pixels is read as bit-coded starting from memory location I; 
                 // I value does not change after the execution of this instruction. As described above, 
