@@ -38,11 +38,11 @@ struct Display
 class Chip8
 {
 private:
-    Ram ram;
-    CPU cpu;
-    Keyboard keyboard;
-    Timer timer;
-    Display display;
+    Ram ram {};
+    CPU cpu {};
+    Keyboard keyboard {};
+    Timer timer {};
+    Display display {};
     unsigned char chip8_fontset[80] = {
         0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
         0x20, 0x60, 0x20, 0x20, 0x70, // 1
@@ -64,7 +64,7 @@ private:
 public:
     bool drawFlag = false;
     bool updateTimers();
-    void initialize();
+    void loadFontSet();
     void loadProgram(const char* program);
     char* emulateCycle();
     void setKeys();

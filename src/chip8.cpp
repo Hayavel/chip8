@@ -1,23 +1,11 @@
 #include "chip8.h"
 
 
-void Chip8::initialize()
+void Chip8::loadFontSet()
 {
-    cpu.pc = 0x200; // Program counter starts at 0x200
-    ram.opcode = 0; // Reset current opcode
-    cpu.I = 0;      // Reset index register 
-    ram.sp = 0;     // Reset stack pointer
-
-    // Clear display
-    // Clear stack
-    // Clear register V0-VF
-    // Clear memory
-
     // Load fontset
     for (size_t i=0; i < 80; ++i)
         ram.memory[i] = chip8_fontset[i];
-    
-    // Reset timer
 }
 void Chip8::loadProgram(const char* program)
 {
@@ -42,10 +30,12 @@ char* Chip8::emulateCycle()
             {
                 case 0x0000: // 0x00E0: Clears the screen
                 {
+                    std::fill(std::begin(display.videoarray), std::end(display.videoarray), 0);
                     break;
                 }
                 case 0x000E: // 0x00EE: Returns from subroutine
                 {
+                    return;
                     break;
                 }
                 default:
@@ -56,13 +46,39 @@ char* Chip8::emulateCycle()
         }
 
         // 0NNN: Calls machine code routine at address NNN. Not necessary for most ROMs
-        // 1NNN: Jumps to address NNN
-        // 2NNN: Calls subroutine at NNN
-        // 3XNN: Skips the next instruction if VX equals NN (usually the next instruction is a jump to skip a code block)
-        // 4XNN: Skips the next instruction if VX does not equal NN (usually the next instruction is a jump to skip a code block)
-        // 5XY0: Skips the next instruction if VX equals VY (usually the next instruction is a jump to skip a code block)
-        // 6XNN: Sets VX to NN
-        // 7XNN: Adds NN to VX (carry flag is not changed)
+        case 0x1000: // 1NNN: Jumps to address NNN
+        {
+
+            break;
+        }
+        case 0x2000: // 2NNN: Calls subroutine at NNN
+        {
+            break;
+        }
+        case 0x3000: // 3XNN: Skips the next instruction if VX equals NN (usually the next instruction is a jump to skip a code block)
+        {
+            break;
+        }
+        case 0x4000: // 4XNN: Skips the next instruction if VX does not equal NN (usually the next instruction is a jump to skip a code block)
+        {
+            break;
+        }
+        case 0x5000: // 5XY0: Skips the next instruction if VX equals VY (usually the next instruction is a jump to skip a code block)
+        {
+            break;
+        }
+        case 0x6000: // 6XNN: Sets VX to NN
+        {
+            break;
+        }
+        case 0x7000: // 7XNN: Adds NN to VX (carry flag is not changed)
+        {
+            break;
+        }
+        case 0x8000:
+        {
+
+        }
         // 8XY0: Set VX to the value of VY
         // 8XY1: Sets VX to VX or VY
         // 8XY2: Sets VX to VX and VY
