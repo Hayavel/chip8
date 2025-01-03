@@ -19,9 +19,14 @@ void Chip8::initialize()
     
     // Reset timer
 }
-void Chip8::loadGame(const char* game)
+void Chip8::loadProgram(const char* program)
 {
-
+    std::ifstream file(program, std::ios::binary);
+    char* buffer;
+    size_t bufferSize;
+    file.read(buffer, bufferSize);
+    for (size_t i=0; i < bufferSize; ++i)
+        ram.memory[512 + i] = buffer[i];
 }
 char* Chip8::emulateCycle()
 {

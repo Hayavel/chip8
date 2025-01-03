@@ -7,7 +7,7 @@ struct Ram
 {
     unsigned short opcode;
     unsigned char memory[4096];
-    
+
     unsigned short stack[16];
     unsigned short sp;
 };
@@ -65,7 +65,7 @@ public:
     bool drawFlag = false;
     bool updateTimers();
     void initialize();
-    void loadGame(const char* game);
+    void loadProgram(const char* program);
     char* emulateCycle();
     void setKeys();
 };
