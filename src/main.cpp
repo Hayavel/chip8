@@ -1,12 +1,17 @@
+#include <cstdlib>
+#include <ctime>
+
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_log.h>
 
 #include "chip8.h"
 
+Chip8 chip8;
+
 int main(int argc, char* argv[])
 {
-    Chip8 chip8;
+    std::srand(std::time(nullptr));
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -28,11 +33,22 @@ int main(int argc, char* argv[])
         return 3;
     }
 
-    chip8.initialize();
     if (argc > 1)
-        chip8.loadGame(argv[2]);
+    {
+        if(!chip8.loadGame(argv[1]))
+        {
+            SDL_Log("Chip8 Load Program Error: Program is not load\n");
+            return 4;
+        }
+    }
     else
-        chip8.loadGame("games/Pong (1 player).ch8");
+    {
+        if(!chip8.loadGame("games/Pong (1 player).ch8"))
+        {
+            SDL_Log("Chip8 Load Pong Error: Pong is not load\n");
+            return 4;
+        }
+    }
 
     while(true)
     {
