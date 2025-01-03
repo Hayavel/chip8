@@ -6,6 +6,8 @@
 
 int main(int argc, char* argv[])
 {
+    Chip8 chip8;
+
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         SDL_Log("SDL_Init Error: %s\n", SDL_GetError());
@@ -26,7 +28,21 @@ int main(int argc, char* argv[])
         return 3;
     }
 
-    SDL_Delay(2000);
+    chip8.initialize();
+    if (argc > 1)
+        chip8.loadGame(argv[2]);
+    else
+        chip8.loadGame("games/Pong (1 player).ch8");
+
+    while(true)
+    {
+        chip8.emulateCycle();
+        chip8.updateTimers();
+        
+        if(chip8.drawFlag)
+            // drawGraphics();
+        chip8.setKeys();
+    }
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
