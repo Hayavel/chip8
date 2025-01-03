@@ -5,34 +5,34 @@
 
 struct Ram
 {
-    unsigned short opcode;
-    unsigned char memory[4096];
+    unsigned short opcode {};
+    unsigned char memory[4096] {};
 
-    unsigned short stack[16];
-    unsigned short sp;
+    unsigned short stack[16] {};
+    unsigned short sp {};
 };
 
 struct CPU
 {
-    unsigned char V[16];
-    unsigned short I;
-    unsigned short pc;
+    unsigned char V[16] {};
+    unsigned short I {};
+    unsigned short pc {0x200};
 };
 
 struct Keyboard
 {
-    unsigned char key[16];
+    unsigned char key[16] {};
 };
 
 struct Timer
 {
-    unsigned char delay_timer;
-    unsigned char sound_timer;
+    unsigned char delay_timer {};
+    unsigned char sound_timer {};
 };
 
 struct Display
 {
-    bool videoarray [2048]; // 64*32 - Screen Size
+    bool videoarray[2048] {}; // 64*32 - Screen Size
 };
 
 class Chip8
