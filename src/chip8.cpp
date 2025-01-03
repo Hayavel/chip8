@@ -34,7 +34,17 @@ char* Chip8::emulateCycle()
 }
 bool Chip8::updateTimers()
 {
-
+    if(timer.delay_timer > 0)
+        --timer.delay_timer;
+    
+    if(timer.sound_timer > 0)
+    {
+        bool sound = false;
+        if(sound_timer == 1)
+            sound = true;
+        --sound_timer;
+        return sound;
+    }
 }
 void Chip8::setKeys()
 {
