@@ -1,5 +1,6 @@
 #include "chip8.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 Chip8::Chip8()
 {
 
@@ -32,7 +33,7 @@ void Chip8::init()
 		ram.memory[i] = 0;
 					
 	// Load fontset
-	for(size_t i = 0x50; i < 80; i++)
+	for(size_t i = 0; i < 80; i++)
 		ram.memory[i] = chip8_fontset[i];		
 
 	// Reset timers
@@ -51,39 +52,58 @@ void Chip8::loadFontSet()
 }
 bool Chip8::loadProgram(const char* program)
 {
-    init();
-    std::cout << "Loading " << program << "\n";
-    std::ifstream file(program, std::ios::ate | std::ios::binary);
-    if (file.good())
-    {
-        size_t bufferSize = file.tellg();
-        file.seekg(0);
-        if (4096 - 512 > bufferSize)
-        {
-            for (size_t i=0; i < bufferSize; i++)
-                file >> ram.memory[512 + i];
-        }
-        else
-        {
-            file.close();
-            std::cout << "Error: ROM too big for memory\n";
-            return 0;
-        }
-    }
-    else
-    {
-        file.close();
-        std::cout << "File error\n";
-        return 0;
-    }
-    file.close();
-    return 1;
-    
+	init();
+	printf("Loading: %s\n", program);
+		
+	// Open file
+	FILE * pFile = fopen(program, "rb");
+	if (pFile == NULL)
+	{
+		fputs ("File error", stderr); 
+		return false;
+	}
+
+	// Check file size
+	fseek(pFile , 0 , SEEK_END);
+	long lSize = ftell(pFile);
+	rewind(pFile);
+	printf("Filesize: %d\n", (int)lSize);
+	
+	// Allocate memory to contain the whole file
+	char * buffer = (char*)malloc(sizeof(char) * lSize);
+	if (buffer == NULL) 
+	{
+		fputs ("Memory error", stderr); 
+		return false;
+	}
+
+	// Copy the file into the buffer
+	size_t result = fread (buffer, 1, lSize, pFile);
+	if (result != lSize) 
+	{
+		fputs("Reading error",stderr); 
+		return false;
+	}
+
+	// Copy buffer to Chip8 memory
+	if((4096-512) > lSize)
+	{
+		for(int i = 0; i < lSize; ++i)
+			ram.memory[i + 512] = buffer[i];
+	}
+	else
+		printf("Error: ROM too big for memory");
+	
+	// Close file, free buffer
+	fclose(pFile);
+	free(buffer);
+
+	return true;
 }
 void Chip8::emulateCycle()
 {
     // Fetch code
-    ram.opcode = ram.memory[cpu.pc] << 8 | ram.memory[cpu.pc + 1];
+    ram.opcode = (ram.memory[cpu.pc] << 8) | ram.memory[cpu.pc + 1];
 
     // Decode opcode
     switch(ram.opcode & 0xF000)
@@ -95,7 +115,7 @@ void Chip8::emulateCycle()
                 case 0x0000: // 0x00E0: Clears the screen
                 {
                     for(int i = 0; i < 2048; i++)
-		                display.videoarray[i] = 0;
+		                display.videoarray[i] = 0x0;
                     drawFlag = true;
                     cpu.pc += 2;
                     break;
@@ -112,6 +132,7 @@ void Chip8::emulateCycle()
                     std::cout << "Unknown opcode [0x0000]: 0x" << ram.opcode << "\n";
                 }
             }
+            break;
         }
         // 0NNN: Calls machine code routine at address NNN. Not necessary for most ROMs
         case 0x1000: // 1NNN: Jumps to address NNN
@@ -235,6 +256,7 @@ void Chip8::emulateCycle()
                     std::cout << "Unknown opcode [0x8000]: 0x" << ram.opcode << "\n";
                 }
             }
+            break;
         }
         case 0x9000: // 9XY0: Skips the next instruction if VX does not equal VY (Usually the next instruction is a jump to skip a code block)
         {
@@ -277,12 +299,11 @@ void Chip8::emulateCycle()
                 {
                     if ((pixel & (0x80 >> xline)) != 0)
                     {
-                        unsigned char tX= (x + xline) % 64;
-                        unsigned char tY= (y + yline) % 32;
-                        unsigned char idx = tX + tY * 64;
-
-                        display.videoarray[idx] ^= 1;
-                        cpu.V[0xF] = display.videoarray[idx] == 0 ? 1 : 0;
+                        if(display.videoarray[(x + xline + ((y + yline) * 64))] == 1)
+						{
+							cpu.V[0xF] = 1;                              
+						}
+						display.videoarray[x + xline + ((y + yline) * 64)] ^= 1;
                     }
                 }
             }
@@ -313,6 +334,7 @@ void Chip8::emulateCycle()
                     std::cout << "Unknown opcode[0xE000]: 0x" << ram.opcode << "\n";
                 }
             }
+            break;
         }
         case 0xF000:
         {
@@ -402,6 +424,7 @@ void Chip8::emulateCycle()
                     std::cout << "Unknown opcode[0xF000]: 0x" << ram.opcode << "\n";
                 }
             }
+            break;
         }
         default:
             std::cout << "Unknown opcode: 0x" << ram.opcode << "\n";
@@ -414,9 +437,6 @@ void Chip8::updateTimers()
     
     if(timer.sound_timer > 0)
     {
-        bool sound = false;
-        if(timer.sound_timer == 1)
-            sound = true;
         --timer.sound_timer;
         // return sound;
     }
