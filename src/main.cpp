@@ -14,8 +14,15 @@ Chip8 chip8{};
 
 int main(int argc, char* argv[])
 {
-    InitWindow(640, 320, "Chip8");
+    InitWindow(1280, 640, "Chip8");
     SetWindowIcon(LoadImage("chip8.png"));
+    RenderTexture2D target = LoadRenderTexture(64, 32);
+    const float virtualRatio = 64.0f/32.0f;
+    Camera2D worldSpaceCamera = {0};  // Game world camera
+    worldSpaceCamera.zoom = 20.0f;
+
+    float cameraX = 0.0f;
+    float cameraY = 0.0f;
 
     if (argc > 1)
     {
@@ -41,14 +48,22 @@ int main(int argc, char* argv[])
         keyboardUp();
         chip8.emulateCycle();
         chip8.updateTimers();
-        BeginDrawing();
-            ClearBackground(BLACK);
-
+        BeginTextureMode(target);
             if(chip8.drawFlag)
+            {
+                ClearBackground(BLACK);
                 drawGraphics();
+            }
+            chip8.drawFlag = false;
+        EndTextureMode();
+        BeginDrawing();
+            BeginMode2D(worldSpaceCamera);
+                DrawTexture(target.texture, 0, 0, WHITE);
+            EndMode2D();
         EndDrawing();
     }
 
+    UnloadRenderTexture(target);
     CloseWindow();
 
     return 0;
@@ -61,10 +76,9 @@ void drawGraphics()
         for (size_t x=0; x < 64; x++) // x
         {
             if (chip8.display.videoarray[y*64 + x])
-                DrawPixel(x, y, WHITE);
+                DrawPixel(x, 31-y, WHITE);
         }
     }
-    // chip8.debugRender();
 }
 
 void keyboardDown()
@@ -92,23 +106,23 @@ void keyboardDown()
 
 void keyboardUp()
 {
-	if(IsKeyDown(KEY_ONE))	        chip8.keyboard.key[0x1] = 0;
-	else if(IsKeyDown(KEY_TWO))	    chip8.keyboard.key[0x2] = 0;
-	else if(IsKeyDown(KEY_THREE))	chip8.keyboard.key[0x3] = 0;
-	else if(IsKeyDown(KEY_FOUR))	chip8.keyboard.key[0xC] = 0;
+	if(IsKeyUp(KEY_ONE))	        chip8.keyboard.key[0x1] = 0;
+	else if(IsKeyUp(KEY_TWO))	    chip8.keyboard.key[0x2] = 0;
+	else if(IsKeyUp(KEY_THREE))	    chip8.keyboard.key[0x3] = 0;
+	else if(IsKeyUp(KEY_FOUR))	    chip8.keyboard.key[0xC] = 0;
 
-	else if(IsKeyDown(KEY_Q))	    chip8.keyboard.key[0x4] = 0;
-	else if(IsKeyDown(KEY_W))	    chip8.keyboard.key[0x5] = 0;
-	else if(IsKeyDown(KEY_E))	    chip8.keyboard.key[0x6] = 0;
-	else if(IsKeyDown(KEY_R))	    chip8.keyboard.key[0xD] = 0;
+	else if(IsKeyUp(KEY_Q))	        chip8.keyboard.key[0x4] = 0;
+	else if(IsKeyUp(KEY_W))	        chip8.keyboard.key[0x5] = 0;
+	else if(IsKeyUp(KEY_E))	        chip8.keyboard.key[0x6] = 0;
+	else if(IsKeyUp(KEY_R))	        chip8.keyboard.key[0xD] = 0;
 
-	else if(IsKeyDown(KEY_A))	    chip8.keyboard.key[0x7] = 0;
-	else if(IsKeyDown(KEY_S))	    chip8.keyboard.key[0x8] = 0;
-	else if(IsKeyDown(KEY_D))	    chip8.keyboard.key[0x9] = 0;
-	else if(IsKeyDown(KEY_F))	    chip8.keyboard.key[0xE] = 0;
+	else if(IsKeyUp(KEY_A))	        chip8.keyboard.key[0x7] = 0;
+	else if(IsKeyUp(KEY_S))	        chip8.keyboard.key[0x8] = 0;
+	else if(IsKeyUp(KEY_D))	        chip8.keyboard.key[0x9] = 0;
+	else if(IsKeyUp(KEY_F))	        chip8.keyboard.key[0xE] = 0;
 
-	else if(IsKeyDown(KEY_Z))	    chip8.keyboard.key[0xA] = 0;
-	else if(IsKeyDown(KEY_X))	    chip8.keyboard.key[0x0] = 0;
-	else if(IsKeyDown(KEY_C))	    chip8.keyboard.key[0xB] = 0;
-	else if(IsKeyDown(KEY_V))	    chip8.keyboard.key[0xF] = 0;
+	else if(IsKeyUp(KEY_Z))	        chip8.keyboard.key[0xA] = 0;
+	else if(IsKeyUp(KEY_X))	        chip8.keyboard.key[0x0] = 0;
+	else if(IsKeyUp(KEY_C))	        chip8.keyboard.key[0xB] = 0;
+	else if(IsKeyUp(KEY_V))	        chip8.keyboard.key[0xF] = 0;
 }
