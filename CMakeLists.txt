@@ -27,7 +27,7 @@ else()
 endif()
 
 target_link_libraries(${PROJECT_NAME}
-                      ${LIBRARY_PATH}/SDL2.dll)
+                      ${LIBRARY_PATH}/raylib.dll)
 
 
 
