@@ -1,68 +1,114 @@
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
 
-#define SDL_MAIN_HANDLED
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_log.h>
+#include <Raylib/raylib.h>
 
 #include "chip8.h"
 
-Chip8 chip8;
+void drawGraphics();
+void keyboardDown();
+void keyboardUp();
+
+Chip8 chip8{};
 
 int main(int argc, char* argv[])
 {
-    std::srand(std::time(nullptr));
-
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    {
-        SDL_Log("SDL_Init Error: %s\n", SDL_GetError());
-        return 1;
-    }
-    SDL_Window *window = SDL_CreateWindow("CHIP 8", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 320, SDL_WINDOW_SHOWN);
-    if (window == nullptr)
-    {
-        SDL_Log("SDL_CreateWindow Error: %s\n", SDL_GetError());
-        return 2;
-    }
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
-    
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE);
-    if (renderer == nullptr)
-    {
-        SDL_Log("SDL_CreateRenderer Error: %s\n", SDL_GetError());
-        return 3;
-    }
+    InitWindow(640, 320, "Chip8");
+    SetWindowIcon(LoadImage("chip8.png"));
 
     if (argc > 1)
     {
-        if(!chip8.loadGame(argv[1]))
+        if(!chip8.loadProgram(argv[1]))
         {
-            SDL_Log("Chip8 Load Program Error: Program is not load\n");
+            std::cout << "Chip8 Load Program Error: Program is not load\n";
             return 4;
         }
     }
     else
     {
-        if(!chip8.loadGame("games/Pong (1 player).ch8"))
+        if(!chip8.loadProgram("games/Pong (1 player).ch8"))
         {
-            SDL_Log("Chip8 Load Pong Error: Pong is not load\n");
+            std::cout << "Chip8 Load Pong Error: Pong is not load\n";
             return 4;
         }
     }
-
-    while(true)
+    // chip8.loadFontSet();
+    SetTargetFPS(60);
+    while(!WindowShouldClose())
     {
+        keyboardDown();
+        keyboardUp();
         chip8.emulateCycle();
         chip8.updateTimers();
-        
-        if(chip8.drawFlag)
-            // drawGraphics();
-        chip8.setKeys();
+        BeginDrawing();
+            ClearBackground(BLACK);
+
+            if(chip8.drawFlag)
+                drawGraphics();
+        EndDrawing();
     }
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    CloseWindow();
 
     return 0;
+}
+
+void drawGraphics()
+{
+    for (size_t y=0; y < 32; y++)
+    {
+        for (size_t x=0; x < 64; x++) // x
+        {
+            if (chip8.display.videoarray[y*64 + x])
+                DrawPixel(x, y, WHITE);
+        }
+    }
+    // chip8.debugRender();
+}
+
+void keyboardDown()
+{
+	if(IsKeyDown(KEY_ONE))	        chip8.keyboard.key[0x1] = 1;
+	else if(IsKeyDown(KEY_TWO))	    chip8.keyboard.key[0x2] = 1;
+	else if(IsKeyDown(KEY_THREE))	chip8.keyboard.key[0x3] = 1;
+	else if(IsKeyDown(KEY_FOUR))	chip8.keyboard.key[0xC] = 1;
+
+	else if(IsKeyDown(KEY_Q))	    chip8.keyboard.key[0x4] = 1;
+	else if(IsKeyDown(KEY_W))	    chip8.keyboard.key[0x5] = 1;
+	else if(IsKeyDown(KEY_E))	    chip8.keyboard.key[0x6] = 1;
+	else if(IsKeyDown(KEY_R))	    chip8.keyboard.key[0xD] = 1;
+
+	else if(IsKeyDown(KEY_A))	    chip8.keyboard.key[0x7] = 1;
+	else if(IsKeyDown(KEY_S))	    chip8.keyboard.key[0x8] = 1;
+	else if(IsKeyDown(KEY_D))	    chip8.keyboard.key[0x9] = 1;
+	else if(IsKeyDown(KEY_F))	    chip8.keyboard.key[0xE] = 1;
+
+	else if(IsKeyDown(KEY_Z))	    chip8.keyboard.key[0xA] = 1;
+	else if(IsKeyDown(KEY_X))	    chip8.keyboard.key[0x0] = 1;
+	else if(IsKeyDown(KEY_C))	    chip8.keyboard.key[0xB] = 1;
+	else if(IsKeyDown(KEY_V))	    chip8.keyboard.key[0xF] = 1;
+}
+
+void keyboardUp()
+{
+	if(IsKeyDown(KEY_ONE))	        chip8.keyboard.key[0x1] = 0;
+	else if(IsKeyDown(KEY_TWO))	    chip8.keyboard.key[0x2] = 0;
+	else if(IsKeyDown(KEY_THREE))	chip8.keyboard.key[0x3] = 0;
+	else if(IsKeyDown(KEY_FOUR))	chip8.keyboard.key[0xC] = 0;
+
+	else if(IsKeyDown(KEY_Q))	    chip8.keyboard.key[0x4] = 0;
+	else if(IsKeyDown(KEY_W))	    chip8.keyboard.key[0x5] = 0;
+	else if(IsKeyDown(KEY_E))	    chip8.keyboard.key[0x6] = 0;
+	else if(IsKeyDown(KEY_R))	    chip8.keyboard.key[0xD] = 0;
+
+	else if(IsKeyDown(KEY_A))	    chip8.keyboard.key[0x7] = 0;
+	else if(IsKeyDown(KEY_S))	    chip8.keyboard.key[0x8] = 0;
+	else if(IsKeyDown(KEY_D))	    chip8.keyboard.key[0x9] = 0;
+	else if(IsKeyDown(KEY_F))	    chip8.keyboard.key[0xE] = 0;
+
+	else if(IsKeyDown(KEY_Z))	    chip8.keyboard.key[0xA] = 0;
+	else if(IsKeyDown(KEY_X))	    chip8.keyboard.key[0x0] = 0;
+	else if(IsKeyDown(KEY_C))	    chip8.keyboard.key[0xB] = 0;
+	else if(IsKeyDown(KEY_V))	    chip8.keyboard.key[0xF] = 0;
 }
