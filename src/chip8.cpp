@@ -405,7 +405,7 @@ void Chip8::emulateCycle()
                     {
                         ram.memory[cpu.I+i] = cpu.V[i];
                     }
-                    cpu.I += ((ram.opcode & 0x0F00) >> 8) + 1;
+                    // cpu.I += ((ram.opcode & 0x0F00) >> 8) + 1;
                     cpu.pc += 2;
                     break;
                 }
@@ -415,7 +415,7 @@ void Chip8::emulateCycle()
                     {
                         cpu.V[i] = ram.memory[cpu.I+i];
                     }
-                    cpu.I += ((ram.opcode & 0x0F00) >> 8) + 1;
+                    // cpu.I += ((ram.opcode & 0x0F00) >> 8) + 1;
                     cpu.pc += 2;
                     break;
                 }

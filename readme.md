@@ -62,4 +62,4 @@
 
 ![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - [Test Opcodes](https://github.com/corax89/chip8-test-rom)
 
-![#EFFF00](https://placehold.co/15x15/EFFF00/EFFF00.png) - [C8_Test Suite](https://github.com/Skosulor/c8int/tree/master/test)
+![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - [C8_Test Suite](https://github.com/Skosulor/c8int/tree/master/test)
