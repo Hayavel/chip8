@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.31.0)
 
-project(Chip8 VERSION 0.0.1)
+project(Chip8 VERSION 0.1.0)
 
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
@@ -15,14 +15,21 @@ set(USING_FILES src/main.cpp
 
 set(RESOURCE res/chip8.rc)
 
+# -DCMAKE_BUILD_TYPE=
 if (CMAKE_BUILD_TYPE STREQUAL "")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug)
+    message("Debug build !")
     add_executable(${PROJECT_NAME} ${USING_FILES} ${RESOURCE})
     
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
-    # set(CMAKE_<LANG>_FLAGS_RELEASE_INIT "-O2 -DNDEBUG") FOR assert
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release)
+    message("Release build !")
+    set(CMAKE_<LANG>_FLAGS_RELEASE_INIT "-O2 -DNDEBUG") # FOR assert
     add_executable(${PROJECT_NAME} WIN32 ${USING_FILES}) # WIN32
-    
+
 else()
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug)
+    message("Debug build!")
     add_executable(${PROJECT_NAME} ${USING_FILES})
 endif()
 
