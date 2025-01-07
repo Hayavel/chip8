@@ -10,7 +10,7 @@
 
 ---
 
-![#FF0000](https://placehold.co/15x15/FF0000/FF0000.png) - BMP Viewer
+![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - BMP Viewer
 
 ![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - Chip 8 Emulator Logo
 
