@@ -70,7 +70,7 @@ public:
     bool drawFlag = true;
     Keyboard keyboard {};
     Display display {};
-    void updateTimers();
+    bool updateTimers();
     void loadFontSet();
     bool loadProgram(const char* program);
     void emulateCycle();

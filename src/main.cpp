@@ -15,8 +15,12 @@ Chip8 chip8{};
 int main(int argc, char* argv[])
 {
     InitWindow(1280, 640, "Chip8");
+    InitAudioDevice();
     SetWindowIcon(LoadImage("chip8.png"));
+
     RenderTexture2D target = LoadRenderTexture(64, 32);
+    Sound beep = LoadSound("beep.ogg");
+    
     const float virtualRatio = 64.0f/32.0f;
     Camera2D worldSpaceCamera = {0};  // Game world camera
     worldSpaceCamera.zoom = 20.0f;
@@ -42,12 +46,16 @@ int main(int argc, char* argv[])
     }
     // chip8.loadFontSet();
     SetTargetFPS(60);
+    bool sound;
     while(!WindowShouldClose())
     {
         keyboardDown();
         keyboardUp();
         chip8.emulateCycle();
-        chip8.updateTimers();
+        sound = chip8.updateTimers();
+        if(sound)
+            PlaySound(beep);
+
         BeginTextureMode(target);
             if(chip8.drawFlag)
             {
@@ -64,6 +72,7 @@ int main(int argc, char* argv[])
     }
 
     UnloadRenderTexture(target);
+    CloseAudioDevice();
     CloseWindow();
 
     return 0;

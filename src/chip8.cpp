@@ -430,7 +430,7 @@ void Chip8::emulateCycle()
             std::cout << "Unknown opcode: 0x" << ram.opcode << "\n";
     }
 }
-void Chip8::updateTimers()
+bool Chip8::updateTimers()
 {
     if(timer.delay_timer > 0)
         --timer.delay_timer;
@@ -438,8 +438,9 @@ void Chip8::updateTimers()
     if(timer.sound_timer > 0)
     {
         --timer.sound_timer;
-        // return sound;
+        return true;
     }
+    return false;
 }
 void Chip8::debugRender()
 {
