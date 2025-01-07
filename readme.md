@@ -16,9 +16,9 @@
 
 ![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - Chip 8 Picture
 
-![#EFFF00](https://placehold.co/15x15/EFFF00/EFFF00.png) - Clock Program 
+![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - Clock Program 
 
-![#EFFF00](https://placehold.co/15x15/EFFF00/EFFF00.png) - Delay Timer Test 
+![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - Delay Timer Test 
 
 ![#EFFF00](https://placehold.co/15x15/EFFF00/EFFF00.png) - Division Test 
 
@@ -32,9 +32,9 @@
 
 ![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - Jumping X and O
 
-![#EFFF00](https://placehold.co/15x15/EFFF00/EFFF00.png) - Keypad Test
+![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - Keypad Test
 
-![#EFFF00](https://placehold.co/15x15/EFFF00/EFFF00.png) - Life
+![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - Life
 
 ![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - Minimal game
 
@@ -52,7 +52,7 @@
 
 ![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - Sierpinski
 
-![#EFFF00](https://placehold.co/15x15/EFFF00/EFFF00.png) - Stars
+![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - Stars
 
 ![#00FF00](https://placehold.co/15x15/00FF00/00FF00.png) - Trip8 Demo
 
