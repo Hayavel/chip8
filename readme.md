@@ -1,6 +1,6 @@
-# Эмулятор Chip8 на C++
+# Emulator Chip8 in C++ using RayLib
 
-## Тестовые программы
+## Test Programs
 
 ![#FF0000](https://placehold.co/15x15/FF0000/FF0000.png) - Broken
 
